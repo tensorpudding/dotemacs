@@ -21,7 +21,7 @@
   (setq linum-format "%5d "))
 
 (add-hook 'prog-mode-hook 'turn-on-line-numbering)
-;;(add-hook 'prog-mode-hook 'fci-mode)
+(add-hook 'prog-mode-hook 'fci-mode)
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
