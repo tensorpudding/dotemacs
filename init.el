@@ -1,9 +1,37 @@
 (add-to-list 'load-path "~/.emacs.d")
 
+;; Packaging junk
 (require 'package)
 (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/") t)
 
+;; (when (not package-archive-contents)
+;;   (package-refresh-contents))
+
+;; ;; Make sure we have all the deps, and upstream packages we want!
+;; (defvar vanilla-packages '(auctex clojure-mode go-mode haskell-mode ido-ubiquitous idle-highlight idle-highlight-mode magit magit-simple-keys paredit projectile scpaste slime slime-repl smex undo-tree vala-mode yasnippet))
+
+;; ;; If we don't, install them
+;; (dolist (p vanilla-packages)
+;;   (when (not (package-installed-p p))
+;;     (package-install p)))
+
+;; Local packages that I have created
+;; (defvar local-packages
+;;   (let ((esk "~/Code/Upstream/emacs-starter-kit/")
+;;         (esk-modules "~/Code/Upstream/emacs-starter-kit/modules/"))
+;;     `((starter-kit . ,(concat esk "starter-kit-2.0.3.tar"))
+;;       (starter-kit-go . ,(concat esk-modules "starter-kit-go.el"))
+;;       (starter-kit-html . ,(concat esk-modules "starter-kit-html.el"))
+;;       (starter-kit-lisp . ,(concat esk-modules "starter-kit-lisp.el"))
+;;       (starter-kit-bindings . ,(concat esk-modules "starter-kit-bindings.el")))))
+
+;; ;; Installs the local packages
+;; (dolist (p local-packages)
+;;   (when (not (package-installed-p (car p)))
+;;     (package-install-file (cdr p))))
+
+;; Resize the window to fit vertically, and have 80 horizontal columns
 (defun set-frame-size-by-resolution ()
   (interactive)
   (if window-system
