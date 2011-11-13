@@ -15,13 +15,11 @@
 
 (set-frame-size-by-resolution)
 
-(defun turn-on-line-numbering ()
-  (interactive)
-  (linum-mode 1)
-  (setq linum-format "%5d "))
+;; Set yas/root-directory
+(setq yas/root-directory '("~/Code/Projects/snippets"))
 
-(add-hook 'prog-mode-hook 'turn-on-line-numbering)
-(add-hook 'prog-mode-hook 'fci-mode)
+;; Start the server
+(server-start)
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
