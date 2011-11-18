@@ -9,7 +9,9 @@
 ;;   (package-refresh-contents))
 
 ;; ;; Make sure we have all the deps, and upstream packages we want!
-;; (defvar vanilla-packages '(auctex clojure-mode go-mode haskell-mode ido-ubiquitous idle-highlight idle-highlight-mode magit magit-simple-keys paredit projectile scpaste slime slime-repl smex undo-tree vala-mode yasnippet))
+;; (defvar vanilla-packages '(auctex clojure-mode go-mode haskell-mode
+;; ido-ubiquitous idle-highlight idle-highlight-mode magit
+;; magit-simple-keys paredit projectile scala-mode scpaste slime slime-repl smex undo-tree vala-mode yasnippet))
 
 ;; ;; If we don't, install them
 ;; (dolist (p vanilla-packages)
