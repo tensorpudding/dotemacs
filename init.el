@@ -31,12 +31,12 @@
 ;;   (when (not (package-installed-p (car p)))
 ;;     (package-install-file (cdr p))))
 
-;; Resize the window to fit vertically, and have 80 horizontal columns
+;; Resize the window to fit vertically, and have 82 vertical columns
 (defun set-frame-size-by-resolution ()
   (interactive)
   (if window-system
       (progn
-	(add-to-list 'default-frame-alist (cons 'width 85))
+	(add-to-list 'default-frame-alist (cons 'width 82))
 	(add-to-list 'default-frame-alist 
 		     (cons 'height (/ (- (x-display-pixel-height) 60)
 				      (frame-char-height)))))))
