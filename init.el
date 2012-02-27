@@ -48,6 +48,13 @@
 ;; Set yas/root-directory
 (setq yas/root-directory '("~/Code/Projects/snippets"))
 
+;; Set SBCL as our CL implementation for Slime
+;; (setq inferior-lisp-program "sbcl")
+;; (add-to-list 'load-path "~/.emacs.d/slime")
+;; ;;(load (expand-file-name "~/quicklisp/slime-helper.el"))
+;; (require 'slime)
+(setq inferior-lisp-program "sbcl")
+
 ;; Start the server
 (server-start)
 
