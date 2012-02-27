@@ -1,5 +1,3 @@
-(add-to-list 'load-path "~/.emacs.d")
-
 ;; Packaging junk
 (require 'package)
 (add-to-list 'package-archives
