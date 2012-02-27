@@ -5,40 +5,64 @@
 (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/") t)
 
-;; (when (not package-archive-contents)
-;;   (package-refresh-contents))
+;; The packages we need
+(defvar upstream-packages '(auctex clojure-mode go-mode haskell-mode
+                                   ido-ubiquitous idle-highlight
+                                   idle-highlight-mode magit paredit projectile
+                                   scala-mode scpaste slime slime-repl smex
+                                   undo-tree vala-mode yasnippet))
 
-;; ;; Make sure we have all the deps, and upstream packages we want!
-;; (defvar vanilla-packages '(auctex clojure-mode go-mode haskell-mode
-;; ido-ubiquitous idle-highlight idle-highlight-mode magit
-;; magit-simple-keys paredit projectile scala-mode scpaste slime slime-repl smex undo-tree vala-mode yasnippet))
+(defmacro with-shell-command (command out-buffer errmessage)
+  `(if (not (eq (call-process-shell-command ,command nil ,out-buffer) 0))
+       (message ,errmessage)
+     (switch-to-buffer ,out-buffer)))
 
-;; ;; If we don't, install them
-;; (dolist (p vanilla-packages)
-;;   (when (not (package-installed-p p))
-;;     (package-install p)))
+(defun my-install-file (package)
+  (with-demoted-errors
+    (package-install-file package)))
 
-;; Local packages that I have created
-;; (defvar local-packages
-;;   (let ((esk "~/Code/Upstream/emacs-starter-kit/")
-;;         (esk-modules "~/Code/Upstream/emacs-starter-kit/modules/"))
-;;     `((starter-kit . ,(concat esk "starter-kit-2.0.3.tar"))
-;;       (starter-kit-go . ,(concat esk-modules "starter-kit-go.el"))
-;;       (starter-kit-html . ,(concat esk-modules "starter-kit-html.el"))
-;;       (starter-kit-lisp . ,(concat esk-modules "starter-kit-lisp.el"))
-;;       (starter-kit-bindings . ,(concat esk-modules "starter-kit-bindings.el")))))
+;; Set up emacs for us, with all the packages we want.
+(defun setup-emacs ()
+  (interactive)
+  ;; Update package definitions
+  (message "Updating package archives...")
+  (when (not package-archive-contents)
+    (package-refresh-contents))
+  ;; First install the upstream packages mentioned before.
+  (dolist (p upstream-packages)
+    (when (not (package-installed-p p))
+      (message "Installing package %s" p)
+      (my-install-file p)))
+  ;; Fetch e-s-k if it's not there
+  (let ((logbuf (get-buffer-create "*emacs-setup-log*")))
+    (cd "~/.emacs.d/")
+    (if (not (file-exists-p "~/.emacs.d/emacs-starter-kit"))
+        (progn (message "Cloning emacs-starter-kit...")
+               (with-shell-command "git clone -b v2 git://github.com/tensorpudding/emacs-starter-kit.git" logbuf "Error cloning emacs-starter-kit")))
+    (cd "~/.emacs.d/emacs-starter-kit")
+    ;; Pull the latest revision and tar it up
+    (message "Pulling latest version of emacs-starter-kit...")
+    (with-shell-command "git pull" logbuf "Error pulling changes.")
+    (message "Creating package tarball...")
+    (cd "~/.emacs.d/emacs-starter-kit")
+    (if (file-exists-p "~/.emacs.d/emacs-starter-kit/starter-kit-2.0.3")
+        (delete-directory "~/.emacs.d/emacs-starter-kit/starter-kit-2.0.3" t))
+    (if (file-exists-p "~/.emacs.d/emacs-starter-kit/starter-kit-2.0.3.tar")
+        (delete-file "~/.emacs.d/emacs-starter-kit/starter-kit-2.0.3.tar"))
+    (with-shell-command "bash tar.sh 2.0.3" logbuf "Error creating tarball.")
+    (my-install-file "~/.emacs.d/emacs-starter-kit/starter-kit-2.0.3.tar")
+    ;; Now install all the modules
+    (message "Installing modules...")
+    (let ((esk-modules (directory-files "modules" t "\\.el$")))
+      (dolist (p esk-modules)
+        (with-demoted-errors (my-install-file p))))))
 
-;; ;; Installs the local packages
-;; (dolist (p local-packages)
-;;   (when (not (package-installed-p (car p)))
-;;     (package-install-file (cdr p))))
-
-;; Resize the window to fit vertically, and have 82 vertical columns
+;; Resize the window to fit vertically, and have 87 vertical columns
 (defun set-frame-size-by-resolution ()
   (interactive)
   (if window-system
       (progn
-	(add-to-list 'default-frame-alist (cons 'width 82))
+	(add-to-list 'default-frame-alist (cons 'width 87))
 	(add-to-list 'default-frame-alist 
 		     (cons 'height (/ (- (x-display-pixel-height) 60)
 				      (frame-char-height)))))))
